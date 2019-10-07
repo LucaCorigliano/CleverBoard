@@ -1,8 +1,8 @@
 # CleverBoard (Work in Progress)
-Rebind every key or combination of keys to whatever you want!
+Keyboard rebinder for Windows!
 
 ## What's this?
-CleverBoard is a Windows Utility that I wrote several years ago. It allows complete customization of your keyboard via rebinding keys and scripting. I've decided to rewrite it from scratch, so it'll be a while before a release.
+CleverBoard is a Windows utility that I wrote several years ago. It allows complete customization of the keyboard via rebinding keys and scripting. I've decided to rewrite it from scratch, so it'll be a while before a release.
 
 ## How does it work?
 It uses Hotkeys. Yep. I know it sounds janky but it worked flawlessly for me for years.
