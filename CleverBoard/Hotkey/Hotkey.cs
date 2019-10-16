@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-
-namespace CleverBoard
+namespace CleverBoard.Hotkey
 {
     public class Hotkey
     {
@@ -16,7 +15,7 @@ namespace CleverBoard
 
         public override string ToString()
         {
-            return  (Ctrl ? "CTRL+" : "") + (Alt ? "ALT+" : "") +  (Shift ? "SHIFT+" : "") + Helpers.HotkeyHelper.KeyToString(Key);
+            return  (Ctrl ? Properties.strings.CTRL + "+" : "") + (Alt ? Properties.strings.ALT + "+" : "") +  (Shift ? Properties.strings.SHIFT + "+" : "") + Helpers.HotkeyHelper.KeyToString(Key);
         }
         public Hotkey()
         {

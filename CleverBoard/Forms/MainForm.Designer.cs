@@ -1,4 +1,4 @@
-﻿namespace CleverBoard
+﻿namespace CleverBoard.Forms
 {
     partial class MainForm
     {
@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ButtonToggleStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.Separator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -43,7 +44,7 @@
             // 
             // mainMenu
             // 
-            this.mainMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.mainMenu, "mainMenu");
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ButtonToggleStatus,
             this.Separator1,
@@ -54,69 +55,58 @@
             this.ButtonExit});
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.mainMenu.Size = new System.Drawing.Size(187, 126);
             // 
             // ButtonToggleStatus
             // 
-            this.ButtonToggleStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.ButtonToggleStatus, "ButtonToggleStatus");
             this.ButtonToggleStatus.Name = "ButtonToggleStatus";
-            this.ButtonToggleStatus.Size = new System.Drawing.Size(186, 22);
-            this.ButtonToggleStatus.Text = "Pause/Resume";
             this.ButtonToggleStatus.Click += new System.EventHandler(this.ToggleKeyboardListenState);
             // 
             // Separator1
             // 
             this.Separator1.Name = "Separator1";
-            this.Separator1.Size = new System.Drawing.Size(183, 6);
+            resources.ApplyResources(this.Separator1, "Separator1");
             // 
             // ButtonUAC
             // 
             this.ButtonUAC.Name = "ButtonUAC";
-            this.ButtonUAC.Size = new System.Drawing.Size(186, 22);
-            this.ButtonUAC.Text = "Request admin rights";
+            resources.ApplyResources(this.ButtonUAC, "ButtonUAC");
             this.ButtonUAC.Click += new System.EventHandler(this.RequestUAC);
             // 
             // ButtonSettings
             // 
             this.ButtonSettings.Name = "ButtonSettings";
-            this.ButtonSettings.Size = new System.Drawing.Size(186, 22);
-            this.ButtonSettings.Text = "Edit Rules...";
+            resources.ApplyResources(this.ButtonSettings, "ButtonSettings");
             this.ButtonSettings.Click += new System.EventHandler(this.OpenSettings);
             // 
             // Separator2
             // 
             this.Separator2.Name = "Separator2";
-            this.Separator2.Size = new System.Drawing.Size(183, 6);
+            resources.ApplyResources(this.Separator2, "Separator2");
             // 
             // ButtonAbout
             // 
             this.ButtonAbout.Name = "ButtonAbout";
-            this.ButtonAbout.Size = new System.Drawing.Size(186, 22);
-            this.ButtonAbout.Text = "About";
+            resources.ApplyResources(this.ButtonAbout, "ButtonAbout");
             this.ButtonAbout.Click += new System.EventHandler(this.OpenAbout);
             // 
             // ButtonExit
             // 
             this.ButtonExit.Name = "ButtonExit";
-            this.ButtonExit.Size = new System.Drawing.Size(186, 22);
-            this.ButtonExit.Text = "Exit";
+            resources.ApplyResources(this.ButtonExit, "ButtonExit");
             this.ButtonExit.Click += new System.EventHandler(this.ExitCleverBoard);
             // 
             // TraybarIcon
             // 
             this.TraybarIcon.ContextMenuStrip = this.mainMenu;
-            this.TraybarIcon.Text = "CleverBoard - Running";
-            this.TraybarIcon.Visible = true;
+            resources.ApplyResources(this.TraybarIcon, "TraybarIcon");
             this.TraybarIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ToggleKeyboardListenState);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "MainForm";
-            this.Text = "CleverBoard";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.mainMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 

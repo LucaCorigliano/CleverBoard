@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel;
-using System.Text;
 
-namespace CleverBoard
+namespace CleverBoard.Hotkey
 {
-    public class Binding
+    public class HotkeyBinding
     {
 
         public string Name;
@@ -23,16 +21,16 @@ namespace CleverBoard
         public override string ToString()
         {
 
-            return  (Enabled ? "" : "[Disabled] ") + (IsPython ? "[Py] " : "") + Name + " - " + Hotkey.ToString();
+            return  (Enabled ? "" : "["+  Properties.strings.Disabled +"] ") + (IsPython ? "[Py] " : "") + Name + " - " + Hotkey.ToString();
         }
 
-        public Binding()
+        public HotkeyBinding()
         {
 
             Hotkey = new Hotkey();
             ProcessList = new BindingList<string>();
             Blacklist = true;
-            Name = "New Hotkey";
+            Name = Properties.strings.New_hotkey;
             Enabled = true;
 
 

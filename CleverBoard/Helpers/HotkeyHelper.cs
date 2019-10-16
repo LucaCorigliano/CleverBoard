@@ -12,7 +12,7 @@ namespace CleverBoard.Helpers
         {
 
 
-            uint num = Win32Helper.MapVirtualKey((uint)keys, 0U);
+            uint num = Win32.MapVirtualKey((uint)keys, 0U);
 
 
 
@@ -34,8 +34,8 @@ namespace CleverBoard.Helpers
                     break;
             }
             StringBuilder lpString = new StringBuilder(260);
-            if (Win32Helper.GetKeyNameText(num << 16, lpString, 260) == 0)
-                return "None";
+            if (Win32.GetKeyNameText(num << 16, lpString, 260) == 0)
+                return Properties.strings.None;
             return lpString.ToString();
         }
         public static uint GetModifiers(bool Ctrl, bool Alt, bool Shift)

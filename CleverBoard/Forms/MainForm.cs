@@ -3,19 +3,41 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CleverBoard.Helpers;
 
-namespace CleverBoard
+namespace CleverBoard.Forms
+
 {
     public partial class MainForm : Form
     {
         public MainForm()
         {
             InitializeComponent();
+
             Program.HotkeyListener.SetHandle(Handle);
+
+         
+            mainMenu.Renderer = new Controls.MyToolStripRenderer();
+
+
+            if (UACHelper.IsAdmin())
+                ButtonUAC.Visible = false;
+
+
+            if(Program.BindingManager.Bindings.Count == 0)
+            {
+                if(MessageBox.Show(Properties.strings.NoHotkeys, Properties.strings.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    new BindingEditor().ShowDialog();
+                }
+            }
+
             StartHotkeys();
         }
 
@@ -29,7 +51,7 @@ namespace CleverBoard
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            if (m.Msg != Helpers.Win32Helper.WM_HOTKEY)
+            if (m.Msg != Win32.WM_HOTKEY)
                 return;
             Program.HotkeyListener.HotkeyCallback(m);
         }
@@ -50,14 +72,15 @@ namespace CleverBoard
         private void RequestUAC(object sender, EventArgs e)
         {
 
-            MessageBox.Show("Unimplemented");
-          /*  StopHotkeys();
-            if (MiscHelper.Elevate(Application.ExecutablePath, "nocheck"))
-                return;
-            int num = (int)MessageBox.Show(Program.Locale.Get("Please choose Yes when prompted for user elevation."), Program.Locale.Get("CleverBoard"), MessageBoxButtons.OK);
-            StartHotkeys();
+           
+            StopHotkeys();
 
-    */
+            if(MessageBox.Show(Properties.strings.UACElevate, Properties.strings.ProgramName, MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (UACHelper.Elevate(Application.ExecutablePath, "nocheck"))
+                    return;
+            
+            StartHotkeys();
+    
         }
 
         private void OpenSettings(object sender, EventArgs e)
@@ -71,48 +94,33 @@ namespace CleverBoard
 
         private void OpenAbout(object sender, EventArgs e)
         {
-            MessageBox.Show("Unimplemented");
-            /*
+         
             StopHotkeys();
             TraybarIcon.Visible = false;
-            int num = (int)new FormAbout().ShowDialog();
+           new AboutDialog().ShowDialog();
             StartHotkeys();
             TraybarIcon.Visible = true;
 
-            */
+            
         }
 
-        private void ToggleAutorun(object sender, EventArgs e)
-        {
-            MessageBox.Show("Unimplemented");
-            /*
-            bool flag = InstallManager.IsInstalled();
-            if (InstallManager.IsInstalled())
-                InstallManager.Uninstall();
-            else
-                InstallManager.Install();
-            ((ToolStripMenuItem)sender).Checked = !flag;
-            */
-        }
+
 
         private void StopHotkeys()
         {
    
             Program.HotkeyListener.StopListening();
-            TraybarIcon.Text = ("CleverBoard - Paused");
+            TraybarIcon.Text = string.Format("{0} - {1}", Properties.strings.ProgramName, Properties.strings.Paused);
             TraybarIcon.Icon = Properties.Resources.cleverboard_disabled;
         }
 
         private void StartHotkeys()
         {
             Program.HotkeyListener.StartListening();
-            TraybarIcon.Text = ("CleverBoard - Running");
+            TraybarIcon.Text = string.Format("{0} - {1}", Properties.strings.ProgramName, Properties.strings.Running);
             TraybarIcon.Icon = Properties.Resources.cleverboard;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
 
-        }
     }
 }

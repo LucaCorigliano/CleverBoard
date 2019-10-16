@@ -4,19 +4,19 @@ using System.IO;
 using System.Xml.Serialization;
 using System.ComponentModel;
 
-namespace CleverBoard
+namespace CleverBoard.Hotkey
 {
-    class BindingManager
+    class HotkeyBindingManager
     {
-        public BindingList<Binding> Bindings;
+        public BindingList<HotkeyBinding> Bindings;
 
      
         private bool _loaded = false;
 
-        public int Add(Binding binding)
+        public int Add(HotkeyBinding binding)
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
             Bindings.Add(binding);
            
             Save();
@@ -25,36 +25,36 @@ namespace CleverBoard
         public void Remove(int index)
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
             Bindings.RemoveAt(index);
             Save();
         }
-        public void Remove(Binding binding)
+        public void Remove(HotkeyBinding binding)
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
             Bindings.Remove(binding);
             Save();
         }
 
-        public IEnumerable<Binding> GetAll()
+        public IEnumerable<HotkeyBinding> GetAll()
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
             return Bindings;
         }
 
-        public Binding Get(int index)
+        public HotkeyBinding Get(int index)
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
             return Bindings[index];
         }
 
-        public void UpdateAt(int index, Binding binding)
+        public void UpdateAt(int index, HotkeyBinding binding)
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
 
             Bindings[index] = binding;
             Save();
@@ -66,11 +66,11 @@ namespace CleverBoard
 
         {
             if (!_loaded)
-                throw new NullReferenceException("Bindings not loaded");
-            if(string.IsNullOrEmpty(filePath))
+                throw new NullReferenceException(Properties.strings.Bindings_not_loaded);
+            if (string.IsNullOrEmpty(filePath))
                 filePath = Config.BindingsFilePath;
             
-            XmlSerializer xml = new XmlSerializer(typeof(BindingList<Binding>));
+            XmlSerializer xml = new XmlSerializer(typeof(BindingList<HotkeyBinding>));
             using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write)) {
                 xml.Serialize(fs, Bindings);
             }
@@ -83,28 +83,31 @@ namespace CleverBoard
             if (string.IsNullOrEmpty(filePath))
             {
                 filePath = Config.BindingsFilePath;
-            } else if (!File.Exists(Config.BindingsFilePath))
+            }
+            if (filePath == Config.BindingsFilePath && !File.Exists(Config.BindingsFilePath))
             {
                 _loaded = true;
-                Bindings = new BindingList<Binding>();
+                Bindings = new BindingList<HotkeyBinding>();
                 return;
 
             }
 
+
+           
             if (!File.Exists(filePath))
-                throw new FileNotFoundException("File not found", filePath);
+                throw new FileNotFoundException(Properties.strings.File_not_found, filePath);
 
             try
             {
-                XmlSerializer xml = new XmlSerializer(typeof(BindingList<Binding>));
+                XmlSerializer xml = new XmlSerializer(typeof(BindingList<HotkeyBinding>));
                 using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     if (replace)
                     {
-                        Bindings = (BindingList<Binding>)xml.Deserialize(fs);
+                        Bindings = (BindingList<HotkeyBinding>)xml.Deserialize(fs);
                     } else
                     {
-                        BindingList<Binding> newBindings = (BindingList<Binding>)xml.Deserialize(fs);
+                        BindingList<HotkeyBinding> newBindings = (BindingList<HotkeyBinding>)xml.Deserialize(fs);
                         foreach(var b in newBindings)
                         {
                             Bindings.Add(b);

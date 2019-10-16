@@ -1,4 +1,4 @@
-﻿namespace CleverBoard
+﻿namespace CleverBoard.Forms
 {
     partial class ListConfigDialog
     {

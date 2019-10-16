@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CleverBoard.Hotkey;
 
 
-namespace CleverBoard
+namespace CleverBoard.Forms
+
 {
     public partial class BindingEditor : Form
     {
@@ -28,7 +33,7 @@ namespace CleverBoard
       
         }
 
-        private void LoadBinding(Binding binding)
+        private void LoadBinding(HotkeyBinding binding)
         {
             txtName.Text = binding.Name;
             txtInput.Text = binding.Action;
@@ -44,7 +49,7 @@ namespace CleverBoard
         private void DeleteBinding()
         {
             isDeleting = true;
-            Program.BindingManager.Remove((Binding)listBindings.SelectedItem);
+            Program.BindingManager.Remove((HotkeyBinding)listBindings.SelectedItem);
             isDeleting = false;
             if (Program.BindingManager.Bindings.Count == 0)
             {
@@ -53,7 +58,7 @@ namespace CleverBoard
             }
             if (listBindings.SelectedItem != null)
             {
-                LoadBinding((Binding)listBindings.SelectedItem);
+                LoadBinding((HotkeyBinding)listBindings.SelectedItem);
             }
             
           
@@ -73,7 +78,7 @@ namespace CleverBoard
 
         private void NewBinding()
         {
-            Binding binding = new Binding();
+            HotkeyBinding binding = new HotkeyBinding();
 
             listBindings.SelectedIndex = Program.BindingManager.Add(binding);
             
@@ -87,13 +92,13 @@ namespace CleverBoard
       
             
             if (
-                (msg.Msg == Helpers.Win32Helper.WM_KEYDOWN || msg.Msg == Helpers.Win32Helper.WM_SYSKEYDOWN)
+                (msg.Msg == Helpers.Win32.WM_KEYDOWN || msg.Msg == Helpers.Win32.WM_SYSKEYDOWN)
                     && txtHotkey.Focused)
             {
 
-                ((Binding)listBindings.SelectedItem).Hotkey.Ctrl = keyData.HasFlag(Keys.Control);
-                ((Binding)listBindings.SelectedItem).Hotkey.Alt = keyData.HasFlag(Keys.Alt);
-                ((Binding)listBindings.SelectedItem).Hotkey.Shift = keyData.HasFlag(Keys.Shift);
+                ((HotkeyBinding)listBindings.SelectedItem).Hotkey.Ctrl = keyData.HasFlag(Keys.Control);
+                ((HotkeyBinding)listBindings.SelectedItem).Hotkey.Alt = keyData.HasFlag(Keys.Alt);
+                ((HotkeyBinding)listBindings.SelectedItem).Hotkey.Shift = keyData.HasFlag(Keys.Shift);
 
                 Keys keyCode = keyData & Keys.KeyCode;
   
@@ -109,15 +114,15 @@ namespace CleverBoard
                     case Keys.LMenu:
                     case Keys.RMenu:
 
-                        ((Binding)listBindings.SelectedItem).Hotkey.Key = Keys.None;
+                        ((HotkeyBinding)listBindings.SelectedItem).Hotkey.Key = Keys.None;
                         break;
 
                     default:
 
-                        ((Binding)listBindings.SelectedItem).Hotkey.Key = keyCode;
+                        ((HotkeyBinding)listBindings.SelectedItem).Hotkey.Key = keyCode;
                         break;
                 }
-                txtHotkey.Text = ((Binding)listBindings.SelectedItem).Hotkey.ToString();
+                txtHotkey.Text = ((HotkeyBinding)listBindings.SelectedItem).Hotkey.ToString();
                 bs.ResetBindings(false);
 
             }
@@ -134,25 +139,25 @@ namespace CleverBoard
             SaveBinding();
             if (listBindings.SelectedItem != null)
             {
-                LoadBinding((Binding)listBindings.SelectedItem);
+                LoadBinding((HotkeyBinding)listBindings.SelectedItem);
             }
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             
-            ((Binding)listBindings.SelectedItem).Name = txtName.Text.Replace("|", " ");
+            ((HotkeyBinding)listBindings.SelectedItem).Name = txtName.Text.Replace("|", " ");
             bs.ResetBindings(false);
         }
 
         private void txtAltInput_TextChanged(object sender, EventArgs e)
         {
-            ((Binding)listBindings.SelectedItem).ActionAlternate = txtAltInput.Text;
+            ((HotkeyBinding)listBindings.SelectedItem).ActionAlternate = txtAltInput.Text;
         }
 
         private void txtInput_TextChanged(object sender, EventArgs e)
         {
-            ((Binding)listBindings.SelectedItem).Action = txtInput.Text;
+            ((HotkeyBinding)listBindings.SelectedItem).Action = txtInput.Text;
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -182,8 +187,21 @@ namespace CleverBoard
 
             if (Program.BindingManager.Bindings.Count == 0)
             {
+                bool createNew = true;
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                var name = currentCulture.Name.ToLower();
+                if (name.StartsWith("it-"))
+                {
+                    if( MessageBox.Show("Vuoi caricare alcune Hotkey utili per la tastiera italiana?", Properties.strings.ProgramName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        createNew = false;
+                    
+                        Program.BindingManager.Load(@"it\locale_bindings.xml", false);
+                    }
+                }
 
-                NewBinding();
+                if(createNew)
+                    NewBinding();
             }
         }
 
@@ -191,7 +209,7 @@ namespace CleverBoard
         {
          
                txtAltInput.Enabled = chkAltCaps.Checked;
-                ((Binding)listBindings.SelectedItem).CapsActionEnabled = chkAltCaps.Checked;
+                ((HotkeyBinding)listBindings.SelectedItem).CapsActionEnabled = chkAltCaps.Checked;
 
         }
 
@@ -199,7 +217,7 @@ namespace CleverBoard
         {
             e.DrawBackground();
 
-            Binding item = (Binding)listBindings.Items[e.Index];
+            HotkeyBinding item = (HotkeyBinding)listBindings.Items[e.Index];
             
            
 
@@ -213,7 +231,7 @@ namespace CleverBoard
 
         private void checkDisable_CheckedChanged(object sender, EventArgs e)
         {
-            ((Binding)listBindings.SelectedItem).Enabled = !chkDisable.Checked;
+            ((HotkeyBinding)listBindings.SelectedItem).Enabled = !chkDisable.Checked;
             bs.ResetBindings(false);
         }
 
@@ -233,7 +251,7 @@ namespace CleverBoard
 
         private void chkPython_CheckedChanged(object sender, EventArgs e)
         {
-            ((Binding)listBindings.SelectedItem).IsPython = chkPython.Checked;
+            ((HotkeyBinding)listBindings.SelectedItem).IsPython = chkPython.Checked;
             UpdateTextBoxes();
             bs.ResetBindings(false);
         }
@@ -265,7 +283,7 @@ namespace CleverBoard
                     Program.BindingManager.Save(sfd.FileName);
                 } catch(Exception ex)
                 {
-                    MessageBox.Show(string.Format("Failed to export, please try again.\n\nException Details:\n{0}", ex.Message), Properties.Resources.ProgramName);
+                    MessageBox.Show(string.Format("Failed to export, please try again.\n\nException Details:\n{0}", ex.Message), Properties.strings.ProgramName);
                 }
             }
         }
@@ -284,7 +302,7 @@ namespace CleverBoard
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(string.Format("Failed to import, please try again.\n\nException Details:\n{0}", ex.Message), Properties.Resources.ProgramName);
+                    MessageBox.Show(string.Format("Failed to import, please try again.\n\nException Details:\n{0}", ex.Message), Properties.strings.ProgramName);
                 }
             }
         }
@@ -293,12 +311,12 @@ namespace CleverBoard
         {
 
             ListConfigDialog lcf = new ListConfigDialog();
-            lcf.ProcessList = ((Binding)listBindings.SelectedItem).ProcessList;
-            lcf.BlackList = ((Binding)listBindings.SelectedItem).Blacklist;
+            lcf.ProcessList = ((HotkeyBinding)listBindings.SelectedItem).ProcessList;
+            lcf.BlackList = ((HotkeyBinding)listBindings.SelectedItem).Blacklist;
 
             lcf.ShowDialog();
-            ((Binding)listBindings.SelectedItem).ProcessList = lcf.ProcessList ;
-            ((Binding)listBindings.SelectedItem).Blacklist = lcf.BlackList ;
+            ((HotkeyBinding)listBindings.SelectedItem).ProcessList = lcf.ProcessList ;
+            ((HotkeyBinding)listBindings.SelectedItem).Blacklist = lcf.BlackList ;
 
         }
     }

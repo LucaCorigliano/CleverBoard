@@ -7,7 +7,7 @@ using System.Threading;
 using static Python.Runtime.Py;
 using System.Diagnostics;
 
-namespace CleverBoard
+namespace CleverBoard.Hotkey
 {
     public class HotkeyListener
     {
@@ -29,7 +29,7 @@ namespace CleverBoard
                 return;
             IsListening = false;
             for (int id = 0; id <= Program.BindingManager.Bindings.Count; ++id)
-                Win32Helper.UnregisterHotKey(this._handle, id);
+                Win32.UnregisterHotKey(this._handle, id);
         }
 
         public void StartListening()
@@ -38,11 +38,11 @@ namespace CleverBoard
                 return;
             IsListening = true;
             int num = 0;
-            foreach (Binding binding in Program.BindingManager.Bindings)
+            foreach (HotkeyBinding binding in Program.BindingManager.Bindings)
             {
                 if (binding.Enabled == false)
                     continue;
-                Win32Helper.RegisterHotKey(_handle, num++, HotkeyHelper.GetModifiers(binding.Hotkey.Ctrl, binding.Hotkey.Alt, binding.Hotkey.Shift), (uint)binding.Hotkey.Key);
+                Win32.RegisterHotKey(_handle, num++, HotkeyHelper.GetModifiers(binding.Hotkey.Ctrl, binding.Hotkey.Alt, binding.Hotkey.Shift), (uint)binding.Hotkey.Key);
             }
         }
 
@@ -80,7 +80,7 @@ namespace CleverBoard
 
         public void HotkeyCallback(Message m)
         {
-            Binding triggeredBinding =  Program.BindingManager.Get(m.WParam.ToInt32());
+            HotkeyBinding triggeredBinding =  Program.BindingManager.Get(m.WParam.ToInt32());
 
 
            /* uint pid;
@@ -135,9 +135,9 @@ namespace CleverBoard
             } else
             {
                 if (triggeredBinding.CapsActionEnabled && Control.IsKeyLocked(Keys.Capital))
-                    Win32Helper.Send(triggeredBinding.ActionAlternate);
+                    Win32.Send(triggeredBinding.ActionAlternate);
                 else
-                    Win32Helper.Send(triggeredBinding.Action);
+                    Win32.Send(triggeredBinding.Action);
  
             }
             

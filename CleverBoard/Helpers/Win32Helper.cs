@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace CleverBoard.Helpers
 {
-    public static class Win32Helper
+    public static class Win32
     {
 
         public const int WM_HOTKEY = 0x312;

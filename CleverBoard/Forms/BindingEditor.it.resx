@@ -117,10 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="mainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>133, 17</value>
-  </metadata>
-  <metadata name="TraybarIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="btnExport.Text" xml:space="preserve">
+    <value>Esporta...</value>
+  </data>
+  <data name="btnImport.Text" xml:space="preserve">
+    <value>Importa...</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="listBindings.Size" type="System.Drawing.Size, System.Drawing">
+    <value>254, 466</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 17</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Cosa vuoi che CleverBoard scriva per te?</value>
+  </data>
+  <data name="chkAltCaps.Size" type="System.Drawing.Size, System.Drawing">
+    <value>311, 21</value>
+  </data>
+  <data name="chkAltCaps.Text" xml:space="preserve">
+    <value>Testo alternativo con BLOCCO MAIUSCOLE attivo</value>
+  </data>
+  <data name="txtAltInput.Size" type="System.Drawing.Size, System.Drawing">
+    <value>431, 101</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 17</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Inserisci la Hotkey:</value>
+  </data>
+  <data name="chkPython.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 21</value>
+  </data>
+  <data name="chkPython.Text" xml:space="preserve">
+    <value>Python Script (utenti avanzati)</value>
+  </data>
+  <data name="chkDisable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 21</value>
+  </data>
+  <data name="chkDisable.Text" xml:space="preserve">
+    <value>Disattiva questa Hotkey</value>
+  </data>
+  <data name="btnNew.Text" xml:space="preserve">
+    <value>Nuova</value>
+  </data>
+  <data name="lblName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 17</value>
+  </data>
+  <data name="lblName.Text" xml:space="preserve">
+    <value>Dai un nome alla tua Hotkey!</value>
+  </data>
+  <data name="btnDelete.Text" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>CleverBoard - Gestore delle Hotkey</value>
+  </data>
 </root>
